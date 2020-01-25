@@ -45,10 +45,16 @@ S_po <- ((n_1 - 1) * S_1 + (n_2 - 1) * S_2) / (n_1 + n_2 - 2)
 
 T2 <- (X_bar_1 - X_bar_2) %*% solve(S_po * (1 / n_1 + 1 / n_2)) %*% (X_bar_1 - X_bar_2)
 p_value <- 1 - pf((n_1 + n_2 - p - 1) / ((n_1 + n_2 - 2) * p) * T2, p, n_1 + n_2 - p - 1)
-qf(0.95, p, n_1 + n_2 - p - 1)
+cat('T2=',T2)
 ```
 
-    ## [1] 3.195056
+    ## T2= 81.69596
+
+``` r
+cat('p value=',p_value)
+```
+
+    ## p value= 7.167988e-11
 
 T2=81.7, p-value=7.17e-11&lt;0.05, Therefore H0 is rejected.
 
@@ -75,6 +81,18 @@ X_bar_1[2] - X_bar_2[2] + c(-1, 1) * qt(1 - 0.05 / (2 * p), nu) *
 
     ## [1] 1.020673 1.724127
 
+``` r
+cat('T2=',T2)
+```
+
+    ## T2= 81.69596
+
+``` r
+cat('p value=',p_value)
+```
+
+    ## p value= 9.689083e-11
+
 T2=81.7, p-value=9.69e-11&lt;0.05, Therefore H0 is rejected.
 
 #### Assuming Normal Distribution
@@ -86,6 +104,18 @@ qchisq(0.95, p)
 ```
 
     ## [1] 5.991465
+
+``` r
+cat('T2=',T2)
+```
+
+    ## T2= 81.69596
+
+``` r
+cat('p value=',p_value)
+```
+
+    ## p value= 2.064267e-09
 
 T2=81.7, p-value=2.06e-09&lt;0.05, Therefore H0 is rejected.
 
