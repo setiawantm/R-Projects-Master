@@ -76,10 +76,17 @@ S_po <- ((n_1 - 1) * S_1 + (n_2 - 1) * S_2) / (n_1 + n_2 - 2)
 
 T2 <- (X_bar_1 - X_bar_2) %*% solve(S_po * (1 / n_1 + 1 / n_2)) %*% (X_bar_1 - X_bar_2)
 p_value <- 1 - pf((n_1 + n_2 - p - 1) / ((n_1 + n_2 - 2) * p) * T2, p, n_1 + n_2 - p - 1)
-qf(0.95, p, n_1 + n_2 - p - 1)
+
+cat('T2=',T2)
 ```
 
-    ## [1] 4.256495
+    ## T2= 1.839086
+
+``` r
+cat('p value=',p_value)
+```
+
+    ## p value= 0.4678087
 
 T2=1.84, p-value=0.468&gt;0.05, therefore H0 is accepted.
 
@@ -92,7 +99,16 @@ nu <- (p + p ^ 2) / ((sum(diag(SS_1 ^ 2)) + sum(diag(SS_1)) ^ 2) / n_1 +
                        (sum(diag(SS_2 ^ 2)) + sum(diag(SS_2)) ^ 2) / n_2)
 T2 <- (X_bar_1 - X_bar_2) %*% solve(S_1 / n_1 + S_2 / n_2) %*% (X_bar_1 - X_bar_2)
 p_value <- 1 - pf((nu - p + 1) / (nu * p) * T2, p, nu - p + 1)
+cat('T2=',T2)
 ```
+
+    ## T2= 1.839086
+
+``` r
+cat('p value=',p_value)
+```
+
+    ## p value= 0.4573856
 
 T2=1.84, p-value=0.457&gt;0.05, therefore H0 is accepted.
 
