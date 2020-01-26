@@ -3,6 +3,10 @@ Comparing Peanut Production and Seed Size from Different Locations
 Setiawan
 September 21, 2018
 
+### Introduction
+
+The peanut dataset has two factors, which are geographical locations and varieties. For each crops, we have measurements of three weight variables: X1 = total yield, X2 = sound mature kernels, and X3 = seed size. In this project, we will test whether the mean vector for total yield and seed size varies by location.
+
 ### Importing Data
 
 ``` r
