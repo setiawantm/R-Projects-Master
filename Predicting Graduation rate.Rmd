@@ -1,0 +1,104 @@
+---
+title: "Predicting Graduation Rate"
+author: "Setiawan"
+date: "January 25, 2020"
+output: rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Predicting Graduation Rate using Regression Tree, Pruned Tree, and Random Forest Regression
+### Histogram for Graduation Rate
+``` {r hist}
+library(ISLR)
+library(glmnet)
+library(boot)
+library(tree)
+library(randomForest)
+attach(College)
+hist(College$Grad.Rate)
+```
+
+### Regression Tree
+We will select 388 colleges data for training data randomly. After that we will train a regression tree using these training datasets.
+
+``` {r tree}
+set.seed(1)
+train=sample(1:nrow(College), 388)
+test=(-train)
+tree.college=tree(Grad.Rate~.,College,subset=train)
+summary(tree.college)
+plot(tree.college)
+text(tree.college,cex=0.7)
+```
+
+#### Predicting Graduation Rate using Test Datasets
+``` {r predtree}
+result=predict(tree.college,newdata=College[test,])
+gradrate=College[test,"Grad.Rate"]
+plot(result,gradrate)
+abline(0,1)
+mean((result-gradrate)^2)
+```
+MSE = 217.078. The prediction accuracy is not very good, however it is nice to have because of its simplicity.
+
+### Pruned Tree
+We will now obtain a pruned version of the tree. After that, we will use cross-validation to assess what an appropriate value of the cost-complexity parameter is and compute a pruned tree.
+``` {r prune}
+cv.college=cv.tree(tree.college)
+names(cv.college)
+plot(cv.college$size,cv.college$dev,type="b")
+plot(cv.college$k,cv.college$dev,type="p")
+best.size <- cv.college$size[which(cv.college$dev==min(cv.college$dev))] # which size is better?
+best.size
+k=cv.college$k[which(cv.college$dev==min(cv.college$dev))]
+k
+prune.college=prune.tree(tree.college,best=best.size)
+plot(prune.college)
+text(prune.college)
+```
+In this case, we choose the value of the cost-complexity parameter to be 3166.406 which corresponds to a tree size of 5 terminal nodes (4 splits).
+
+#### Predicting Graduation Rate using Pruned Tree
+``` {r predictprune}
+result2=predict(prune.college,newdata=College[test,])
+plot(result2,gradrate)
+abline(0,1)
+mean((result2-gradrate)^2)
+```
+The new test MSE is 201.5259, which is lower than for the original tree. Typically, we would expect the pruned tree to have lower MSE (it was selected via CV to have low MSE), however, due to the randomness in selecting the test dataset there is no guarantee that the MSE will be lower.
+
+### Random Forest Regression
+Random forest is a Supervised Learning algorithm which uses ensemble learning method for classification and regression.
+Random forest is a bagging technique and not a boosting technique. The trees in random forests are run in parallel. There is no interaction between these trees while building the trees.
+It operates by constructing a multitude of decision trees at training time and outputting the class that is the mode of the classes (classification) or mean prediction (regression) of the individual trees.
+
+``` {r randforest}
+rf.college=randomForest(Grad.Rate~.,College,subset=train,mtry=6,importance=TRUE)
+rf.college
+plot(rf.college)
+```
+The number of trees should probably be set to some value between 100 and 200.
+
+#### Predicting Graduation Rate using Random Forest Regression
+``` {r predictrandf}
+College.test=College[-train,"Grad.Rate"] 
+yhat.rf = predict(rf.college,newdata=College[-train,]) 
+mean((yhat.rf-College.test)^2)
+```
+The MSE from random forest model is 160.141, which is much lower than regression tree and pruned tree.
+
+### Fit a Random Forest Clasifier to Predict value of High (Graduation Rate>70)
+``` {r high}
+High=ifelse(Grad.Rate>70,"Yes","No")
+College=data.frame(College,High)
+Collegehigh.test=College[-train,]
+High.test=High[-train]
+rf.collegehigh=randomForest(High~.-Grad.Rate,College,subset=train)
+rf.collegehigh
+rf.predhigh=predict(rf.collegehigh,Collegehigh.test,type="class")
+table(rf.predhigh,High.test)
+```
+
