@@ -6,6 +6,10 @@ November 25, 2018
 Predicting Graduation Rate using Regression Tree, Pruned Tree, and Random Forest Regression
 -------------------------------------------------------------------------------------------
 
+### Introduction
+
+This project is done to predict Graduation Rate based on datasets from colleges. 388 datasets are used as training sets, and the rests are used as test datasets. The predictions used are Regression Tree, Pruned Tree and Random Forest Regression. Using the 388 training sets, the models are trained, after that they are tested using test datasets, and finally mean squared error for every models is calculated to determine which model is the best option to predict the graduation rate.
+
 ### Histogram for Graduation Rate
 
 ``` r
