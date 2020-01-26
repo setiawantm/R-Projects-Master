@@ -3,16 +3,21 @@ PCA and Clustering for Log Data
 Setiawan
 November 11, 2018
 
+Introduction
+------------
+
+Well log data captures both sand and shale data. For conventional purposes, our target is usually sandstones since sandstones have better permeability which is an indicator of how easy a fluid can flow through the pores. In this project, we will try to differentiate between sandstones and shales using clustering method. Furthermore, using the same method, we will also try to differentiate good quality (i.e. highly porous and highly permeable) sandstones. K-means clustering is chosen as the clustering method, and to determine the number of cluster, we will try 3 different cluster options. They are 4,5, and 6 clusters. Prior to running clustering algorithm, we will use Principal Component Analysis to see if dimension reduction if possible to speed up the process without much information loss. We will try to reduce the dimension while maintaining the variance explained above 90% to minimize information losses.
+
 Principal Component Analysis for Well Log Data
 ----------------------------------------------
 
-Principal Component Analysis (PCA) Principal component analysis is done by selecting a new axes that represents maximum variability. The new axes depend on the eigenvectors of the covariance matrix. The first principal component always explains the highest proportion of the variance, followed by the second principal component and so on and so forth. The principal components can be determined by multiplying the original variables with eigenvectors of the covariance matrix. In other words, the principal components are the linear combinations of the original variables, with the eigenvectors of the covariance matrix which are the coefficients of the linear combinations.
+Principal Component Analysis (PCA) is done by selecting a new axes that represents maximum variability. The new axes depend on the eigenvectors of the covariance matrix. The first principal component always explains the highest proportion of the variance, followed by the second principal component and so on and so forth. The principal components can be determined by multiplying the original variables with eigenvectors of the covariance matrix. In other words, the principal components are the linear combinations of the original variables, with the eigenvectors of the covariance matrix which are the coefficients of the linear combinations.
 
 PCA can be used to reduce dimension to reduce the complexity of an analysis. This can be done by selecting few first principal components and discard the remaining others. The nature of PCA is that the first principal component always explains the greatest variance, and the proportion of variance explained is lower for the next principal components so that the k-th principal component explains more variance than (k+1)-th principal component.
 
 ### Importing and Normalizing (Scaling) Data
 
-There are 7 well log variables data that will be imported. The data is normalized (centered and scaled) to ensure that the analysis is not dominated by a certain variable which has a large variance and therefore overshadowing the “more important” variables in the process.
+There are 7 well log variables data that will be imported. The data is normalized (centered and scaled) to ensure that the analysis is not dominated by a certain variable which has a large variance and therefore overshadowing the more important variables in the process.
 
 ``` r
 dta=read.delim("test.dat")
@@ -174,7 +179,7 @@ dev.off()
     ## png 
     ##   2
 
-Principal components have no physical meaning. However, we can interpret them based on the relationship of the principal components and the original variables. Figure above shows the relationship between PC1 and PC2 (the first 2 principal components) with the 7 variables. The relationship follows the value of coefficients (correlations) which are the eigenvectors showed earlier. Based on the figure, the first principal component has a monotonic increasing relationship with the porosity and the second principal component has a monotonic decreasing relationship with the gamma ray and photoelectric log which tell us the lithology. In other words, the first principal component “explains” the tightness of the rock and the second principal component “explains” the lithology of the rock (GR).
+Principal components have no physical meaning. However, we can interpret them based on the relationship of the principal components and the original variables. Figure above shows the relationship between PC1 and PC2 (the first 2 principal components) with the 7 variables. The relationship follows the value of coefficients (correlations) which are the eigenvectors showed earlier. Based on the figure, the first principal component has a monotonic increasing relationship with the porosity and the second principal component has a monotonic decreasing relationship with the gamma ray and photoelectric log which tell us the lithology. In other words, the first principal component explains the tightness of the rock and the second principal component explains the lithology of the rock (GR).
 
 Clustering
 ----------
